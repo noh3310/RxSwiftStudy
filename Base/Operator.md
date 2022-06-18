@@ -62,3 +62,42 @@
                     .subscribe(onNext: { print($0) })
                     .disposed(by: disposeBag)
             ```
+
+### Observable 변환 연산자
+- 변환 연산자는 만들어진 데이터 흐름을 변화할 수 있는 연산자
+- 종류
+    - Map
+        - Obsaervable이 방출한 항목에 함수를 적용할 수 있다.
+        - 방출하는 값을 변경할 수 있다.
+        - 사용법
+            ```Swift
+                // 출력값: 2, 4, 6, 8, 10
+                Observable.from([1, 2, 3, 4, 5])
+                    .map { $0 * 2 }
+                    .subscribe(onNext: {
+                        print($0)
+                    })
+                    .disposed(by: disposeBag)
+            ```
+    - flatMap
+        - Observable로 방출된 항목을 다시 Observable로 변경한다.
+        - 자체적으로 Observable 멤버가 있거나, 다른 방식으로 Observable로 변환 가능한 Observable이 있을 때 유용하게 사용할 수 있다.
+        - 네트워크 호출할 때 주로 사용된다.
+        - 사용법
+            ```Swift
+                // 자체적으로 Observable 멤버가 있는 경우
+                // 출력값: 10
+                struct Item {
+                    var value: BehaviorRelay<Int>
+                }
+
+                let score = BehaviorRelay<Int>(value: 10)
+                let item = Item(value: score)
+                
+                Observable<Item>.just(item)
+                    .flatMap { $0.value }
+                    .subscribe(onNext: {
+                        print($0)
+                    })
+                    .disposed(by: disposeBag)
+            ```

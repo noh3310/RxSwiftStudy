@@ -5,6 +5,13 @@
     - onError: 에러 발생시 Error 이벤트 전달
     - onCompleted: 오류가 발생하지 않고, 마지막 onNext가 호출된 후 이 Completed 이벤트 전달
 
+### Hot & Cold Observable
+- Hot Observable
+    - 값이 변경되었을 때 구독한것과 관계없이 바로 이벤트를 방출한다.
+    - 나중에 구독한 Observer의 경우 중간부터 이벤트를 알림받을 수 있다.
+- Cold Observable
+    - Observer가 subscribe하기를 기다렸다가 구독 하자마자 변경된 값을 전체다 전달하는 것
+
 ## Observer
 - Observable을 구독하고, 구독한 Observable의 값 변경을 알림받는다.
     - Observer가 Observable을 구독하는것을 subscribe라고 한다.

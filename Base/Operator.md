@@ -101,3 +101,57 @@
                 })
                 .disposed(by: disposeBag)
             ```
+    - asArray
+        - 하나의 요소를 방출하는 옵저버블로 전환하는 연산자
+        - 더이상 방출하지 않는 시점(onCompleted)에 요소를 방출한다.
+        - 사용법
+            ```Swift
+            // 출력값: success([1, 2, 3])
+            let observe = Observable<Int>.create { observer -> Disposable in
+                observer.onNext(1)
+                observer.onNext(2)
+                observer.onNext(3)
+                observer.onCompleted()
+                return Disposables.create()
+            }
+            
+            observe
+                .toArray()
+                .subscribe { print($0) }
+                .disposed(by: disposeBag)
+            ```
+
+### Observable 필터링 연산자
+- Observable에서 선택적으로 항목을 방출하는 연산자
+- 종류
+    - Filter
+        - 함수를 만족하는 값만 방출한다.
+        - 사용법
+            ```Swift
+            // 홀수만 방출하도록 filter 설정
+            // 출력값: 2, 4, 6, 8, 10
+            let array = [Int](1...10)
+        
+            Observable.from(array)
+                .filter { $0 % 2 == 0 }
+                .subscribe(onNext: {
+                    print($0)
+                })
+                .disposed(by: disposeBag)
+            ```
+    - Distinct
+        - 중복되는 아이템을 방출하는것을 막는 연산자
+        - 연달아 방출되는 값을 막는데 사용
+        - 사용법
+        ```Swift
+        // 연달아 중복된 값인 3은 한번만 방출된다.
+        // 출력값: 1, 2, 3, 1, 2, 4
+        let array = [1, 2, 3, 3, 1, 2, 4]
+        
+        Observable.from(array)
+            .distinctUntilChanged()
+            .subscribe(onNext: {
+                print($0)
+            })
+            .disposed(by: disposeBag)
+        ```
